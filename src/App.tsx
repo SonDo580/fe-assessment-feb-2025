@@ -1,5 +1,11 @@
+import SearchPage from "./pages/SearchPage";
+
 function App() {
-  return <div>App</div>;
+  return (
+    <>
+      <SearchPage />
+    </>
+  );
 }
 
 export default App;
