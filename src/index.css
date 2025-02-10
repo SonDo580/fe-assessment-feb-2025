@@ -3,3 +3,7 @@
 @theme {
   --color-primary: "#1C76D5";
 }
+
+body {
+  font-family: "Open Sans";
+}

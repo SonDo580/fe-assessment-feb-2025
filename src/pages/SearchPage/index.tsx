@@ -1,5 +1,11 @@
+import Banner from "./components/Banner";
+
 function SearchPage() {
-  return <div>SearchPage</div>;
+  return (
+    <>
+      <Banner />
+    </>
+  );
 }
 
 export default SearchPage;
