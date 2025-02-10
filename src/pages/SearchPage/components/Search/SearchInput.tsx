@@ -1,5 +1,5 @@
 function SearchInput() {
-  return <div>SearchInput</div>;
+  return <input type="text" className="grow"/>;
 }
 
 export default SearchInput;
