@@ -18,7 +18,12 @@ function ResultItem({ item }: IProps) {
 
       <p className="leading-6 tracking-[0.14px]">{DocumentExcerpt.Text}</p>
 
-      <a href={DocumentURI} className="">{DocumentURI}</a>
+      <a
+        href={DocumentURI}
+        className="text-[#686868] text-[14px] leading-[26px] tracking-[0.12px]"
+      >
+        {DocumentURI}
+      </a>
     </div>
   );
 }
