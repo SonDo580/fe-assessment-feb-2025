@@ -1,4 +1,4 @@
-type THighlightOffset = {
+export type THighlightOffset = {
   BeginOffset: number;
   EndOffset: number;
 };
@@ -19,3 +19,5 @@ export type TResultItem = {
   DocumentExcerpt: TDocumentExcerpt;
   DocumentURI: string;
 };
+
+export type TTextSegment = { text: string; shouldHighlight: boolean }

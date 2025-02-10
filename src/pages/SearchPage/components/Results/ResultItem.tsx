@@ -1,4 +1,6 @@
+import HighlightText from "@/components/ui/HighlightText";
 import { TResultItem } from "@/types";
+import { produceDocumentTextSegments } from "@/utils/produce-text-segments";
 
 interface IProps {
   item: TResultItem;
@@ -13,10 +15,22 @@ function ResultItem({ item }: IProps) {
         href={DocumentURI}
         className="text-primary font-semibold text-[22px] leading-[28px] tracking-[0px] hover:underline"
       >
-        {DocumentTitle.Text}
+        <HighlightText
+          textSegments={produceDocumentTextSegments(
+            DocumentTitle.Text,
+            DocumentTitle.Highlights
+          )}
+        />
       </a>
 
-      <p className="leading-6 tracking-[0.14px]">{DocumentExcerpt.Text}</p>
+      <p className="leading-6 tracking-[0.14px]">
+        <HighlightText
+          textSegments={produceDocumentTextSegments(
+            DocumentExcerpt.Text,
+            DocumentExcerpt.Highlights
+          )}
+        />
+      </p>
 
       <a
         href={DocumentURI}
