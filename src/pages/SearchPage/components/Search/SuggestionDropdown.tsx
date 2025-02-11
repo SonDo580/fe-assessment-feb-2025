@@ -1,15 +1,34 @@
 import classNames from "classnames";
 
-import suggestionResults from "@/mock/suggestions.json";
 import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
+import { suggestionEndpoint } from "@/services/api-endpoints";
+import { useQuery } from "@/hooks/useQuery";
+import { TSuggestionResults } from "@/types";
 
 interface IProps {
   className: string;
+  keyword: string;
 }
 
-function SuggestionDropdown({ className }: IProps) {
-  const { stemmedQueryTerm, suggestions } = suggestionResults;
+function SuggestionDropdown({ keyword, className }: IProps) {
+  const { loading, data, errorMsg } = useQuery<TSuggestionResults>({
+    url: keyword && `${suggestionEndpoint}?keyword=${keyword}`,
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (errorMsg) {
+    return <div className="text-red-700">{errorMsg}</div>;
+  }
+
+  if (!data) {
+    return;
+  }
+
+  const { stemmedQueryTerm, suggestions } = data;
 
   return (
     <div

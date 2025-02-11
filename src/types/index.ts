@@ -28,5 +28,11 @@ export type TSeachResults = {
   ResultItems: TResultItem[];
 };
 
+/* Suggestions */
+export type TSuggestionResults = {
+  stemmedQueryTerm: string;
+  suggestions: string[];
+};
+
 /* Other */
 export type TTextSegment = { text: string; shouldHighlight: boolean };

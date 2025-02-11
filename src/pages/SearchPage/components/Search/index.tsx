@@ -58,7 +58,10 @@ function Search() {
           )}
 
           {shouldShowDropdown && (
-            <SuggestionDropdown className="absolute left-0 right-0" />
+            <SuggestionDropdown
+              keyword={keyword}
+              className="absolute left-0 right-0"
+            />
           )}
         </div>
 
