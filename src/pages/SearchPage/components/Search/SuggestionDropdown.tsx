@@ -30,6 +30,12 @@ function SuggestionDropdown({ keyword, className }: IProps) {
 
   const { stemmedQueryTerm, suggestions } = data;
 
+  const NUMBER_OF_SUGGESTIONS_TO_DISPLAY = 6;
+  const displayedSuggestions = suggestions.slice(
+    0,
+    NUMBER_OF_SUGGESTIONS_TO_DISPLAY
+  );
+
   return (
     <div
       className={classNames(
@@ -37,7 +43,7 @@ function SuggestionDropdown({ keyword, className }: IProps) {
         "p-2 rounded-b-md shadow-common bg-white flex flex-col"
       )}
     >
-      {suggestions.map((suggestion, index) => (
+      {displayedSuggestions.map((suggestion, index) => (
         <div
           key={index}
           className="px-6 py-3 hover:cursor-pointer hover:bg-slate-100"

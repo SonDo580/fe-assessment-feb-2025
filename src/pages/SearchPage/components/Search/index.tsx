@@ -14,9 +14,13 @@ function Search() {
   const searchInputRef = useRef<SearchInputRef>(null);
   const debouncedKeyword = useDebounce(keyword);
 
-  const shouldShowDropdown =
+  const shouldShowClearButton =
     !!keyword && (searchInputRef.current?.isFocused as boolean);
-  const shouldShowCloseButton = shouldShowDropdown;
+
+  const MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS = 2;
+  const shouldShowDropdown =
+    keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS &&
+    (searchInputRef.current?.isFocused as boolean);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -49,7 +53,7 @@ function Search() {
             shouldShowDropdown={shouldShowDropdown}
           />
 
-          {shouldShowCloseButton && (
+          {shouldShowClearButton && (
             <ClearButton
               onClick={onClearInput}
               className={classNames(
