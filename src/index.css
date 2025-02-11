@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1C76D5;
+  --color-primary: #1c76d5;
+}
+
+@layer utilities {
+  .shadow-common {
+    box-shadow: 0px 4px 8px 4px #e0e4e559;
+  }
 }
 
 body {

@@ -1,5 +1,7 @@
 import classNames from "classnames";
+
 import ClearButton from "./ClearButton";
+import SuggestionDropdown from "./SuggestionDropdown";
 
 function SearchInput() {
   return (
@@ -19,6 +21,8 @@ function SearchInput() {
           "cursor-pointer"
         )}
       />
+
+      <SuggestionDropdown className="absolute left-0 right-0" />
     </div>
   );
 }
