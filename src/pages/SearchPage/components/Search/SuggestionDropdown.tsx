@@ -9,9 +9,10 @@ import { TSuggestionResults } from "@/types";
 interface IProps {
   className: string;
   keyword: string;
+  onSelect: (suggestion: string) => void;
 }
 
-function SuggestionDropdown({ keyword, className }: IProps) {
+function SuggestionDropdown({ keyword, className, onSelect }: IProps) {
   const { loading, data, errorMsg } = useQuery<TSuggestionResults>({
     url: keyword && `${suggestionEndpoint}?keyword=${keyword}`,
   });
@@ -37,16 +38,17 @@ function SuggestionDropdown({ keyword, className }: IProps) {
   );
 
   return (
-    <div
+    <ul
       className={classNames(
         className,
-        "p-2 rounded-b-md shadow-common bg-white flex flex-col"
+        "rounded-b-md shadow-common bg-white flex flex-col"
       )}
     >
       {displayedSuggestions.map((suggestion, index) => (
-        <div
+        <li
           key={index}
           className="px-6 py-3 hover:cursor-pointer hover:bg-slate-100"
+          onClick={() => onSelect(suggestion)}
         >
           <HighlightText
             textSegments={produceSuggestionTextSegments(
@@ -54,9 +56,9 @@ function SuggestionDropdown({ keyword, className }: IProps) {
               suggestion
             )}
           />
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 

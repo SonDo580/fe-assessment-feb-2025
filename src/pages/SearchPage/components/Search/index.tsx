@@ -41,6 +41,15 @@ function Search() {
     }
   };
 
+  const onSelectSuggestion = (suggestion: string) => {
+    searchInputRef.current?.blur();
+
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("q", suggestion);
+    setSearchParams(newSearchParams);
+    setKeyword(suggestion);
+  };
+
   return (
     <div className="px-40 py-10 shadow-common">
       <div className="flex gap-0">
@@ -67,6 +76,7 @@ function Search() {
             <SuggestionDropdown
               keyword={debouncedKeyword}
               className="absolute left-0 right-0"
+              onSelect={onSelectSuggestion}
             />
           )}
         </div>
