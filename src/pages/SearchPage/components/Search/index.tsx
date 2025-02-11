@@ -11,11 +11,18 @@ function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get("q") || "");
   const searchInputRef = useRef<SearchInputRef>(null);
+
   const shouldShowDropdown =
     !!keyword && (searchInputRef.current?.isFocused as boolean);
+  const shouldShowCloseButton = shouldShowDropdown;
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
+  };
+
+  const onClearInput = () => {
+    setKeyword("");
+    searchInputRef.current?.focus();
   };
 
   const onSearch = () => {
@@ -39,16 +46,22 @@ function Search() {
             onSearch={onSearch}
             shouldShowDropdown={shouldShowDropdown}
           />
-          <ClearButton
-            className={classNames(
-              "absolute right-2 top-1/2 -translate-y-1/2",
-              "cursor-pointer"
-            )}
-          />
+
+          {shouldShowCloseButton && (
+            <ClearButton
+              onClick={onClearInput}
+              className={classNames(
+                "absolute right-2 top-1/2 -translate-y-1/2",
+                "cursor-pointer"
+              )}
+            />
+          )}
+
           {shouldShowDropdown && (
             <SuggestionDropdown className="absolute left-0 right-0" />
           )}
         </div>
+
         <SearchButton onClick={onSearch} />
       </div>
     </div>
