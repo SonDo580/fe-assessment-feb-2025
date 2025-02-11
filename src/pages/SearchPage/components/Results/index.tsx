@@ -10,7 +10,7 @@ function Results() {
   const keyword = searchParams.get("q") || "";
 
   const { loading, data, errorMsg } = useQuery<TSeachResults>({
-    url: `${searchEndpoint}?keyword=${keyword}`,
+    url: keyword && `${searchEndpoint}?keyword=${keyword}`,
   });
 
   if (!keyword) {

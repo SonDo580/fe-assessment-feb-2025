@@ -6,6 +6,10 @@ export function useQuery<T>({ url }: { url: string }) {
   const [data, setData] = useState<T | null>(null);
 
   useEffect(() => {
+    if (!url) {
+      return;
+    }
+
     (async () => {
       setLoading(true);
 
