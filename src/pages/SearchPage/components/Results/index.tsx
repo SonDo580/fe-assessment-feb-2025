@@ -1,8 +1,42 @@
-import queryResults from "@/mock/queryResults.json";
+import { useSearchParams } from "react-router-dom";
+
 import ResultItem from "./ResultItem";
+import { useQuery } from "@/hooks/useQuery";
+import { searchEndpoint } from "@/services/api-endpoints";
+import { TSeachResults } from "@/types";
 
 function Results() {
-  const { TotalNumberOfResults, Page, PageSize, ResultItems } = queryResults;
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("q") || "";
+
+  const { loading, data, errorMsg } = useQuery<TSeachResults>({
+    url: `${searchEndpoint}?keyword=${keyword}`,
+  });
+
+  if (!keyword) {
+    return;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (errorMsg) {
+    return <div className="text-red-700">{errorMsg}</div>;
+  }
+
+  if (!data) {
+    return;
+  }
+
+  const { TotalNumberOfResults, Page, PageSize, ResultItems } = data;
+  if (TotalNumberOfResults === 0) {
+    return (
+      <div>
+        No results found for <span className="font-bold">keyword</span>
+      </div>
+    );
+  }
 
   const start = (Page - 1) * PageSize + 1;
   const end = start + ResultItems.length - 1;
@@ -18,11 +52,6 @@ function Results() {
           <ResultItem key={item.DocumentId} item={item} />
         ))}
       </div>
-
-      {/* <div>
-        No results found for{" "}
-        <span className="font-bold">example keyword</span>
-      </div> */}
     </div>
   );
 }

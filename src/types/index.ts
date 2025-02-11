@@ -1,3 +1,4 @@
+/* Search results */
 export type THighlightOffset = {
   BeginOffset: number;
   EndOffset: number;
@@ -20,4 +21,12 @@ export type TResultItem = {
   DocumentURI: string;
 };
 
-export type TTextSegment = { text: string; shouldHighlight: boolean }
+export type TSeachResults = {
+  TotalNumberOfResults: number;
+  Page: number;
+  PageSize: number;
+  ResultItems: TResultItem[];
+};
+
+/* Other */
+export type TTextSegment = { text: string; shouldHighlight: boolean };
