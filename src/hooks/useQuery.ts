@@ -12,7 +12,7 @@ export function useQuery<T>({ url }: { url: string }) {
       try {
         const response = await fetch(url + "x");
         if (!response.ok) {
-          throw new Error(`Error fetching search results`);
+          throw new Error(`Error fetching data`);
         }
 
         const data = await response.json();
