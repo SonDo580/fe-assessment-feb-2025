@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Ref, useImperativeHandle } from "react";
 
 import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
@@ -6,16 +7,40 @@ import { suggestionEndpoint } from "@/services/api-endpoints";
 import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
 
+export interface SuggestionDropdownRef {
+  displayedSuggestions: string[];
+}
+
 interface IProps {
   className: string;
   keyword: string;
   onSelect: (suggestion: string) => void;
+  activeIndex: number;
+  ref: Ref<SuggestionDropdownRef>;
 }
 
-function SuggestionDropdown({ keyword, className, onSelect }: IProps) {
+function SuggestionDropdown({
+  activeIndex,
+  keyword,
+  className,
+  onSelect,
+  ref,
+}: IProps) {
   const { loading, data, errorMsg } = useQuery<TSuggestionResults>({
     url: keyword && `${suggestionEndpoint}?keyword=${keyword}`,
   });
+
+  const NUMBER_OF_SUGGESTIONS_TO_DISPLAY = 6;
+  const displayedSuggestions =
+    data?.suggestions.slice(0, NUMBER_OF_SUGGESTIONS_TO_DISPLAY) || [];
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      displayedSuggestions,
+    }),
+    [data]
+  );
 
   if (loading) {
     return <div>Loading...</div>;
@@ -29,14 +54,6 @@ function SuggestionDropdown({ keyword, className, onSelect }: IProps) {
     return;
   }
 
-  const { stemmedQueryTerm, suggestions } = data;
-
-  const NUMBER_OF_SUGGESTIONS_TO_DISPLAY = 6;
-  const displayedSuggestions = suggestions.slice(
-    0,
-    NUMBER_OF_SUGGESTIONS_TO_DISPLAY
-  );
-
   return (
     <ul
       className={classNames(
@@ -47,12 +64,15 @@ function SuggestionDropdown({ keyword, className, onSelect }: IProps) {
       {displayedSuggestions.map((suggestion, index) => (
         <li
           key={index}
-          className="px-6 py-3 hover:cursor-pointer hover:bg-slate-100"
+          className={classNames(
+            "px-6 py-3 hover:cursor-pointer hover:bg-slate-100",
+            activeIndex === index && "bg-slate-100"
+          )}
           onClick={() => onSelect(suggestion)}
         >
           <HighlightText
             textSegments={produceSuggestionTextSegments(
-              stemmedQueryTerm,
+              data.stemmedQueryTerm,
               suggestion
             )}
           />

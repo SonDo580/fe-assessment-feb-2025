@@ -18,7 +18,8 @@ interface IProps {
   value: string;
   shouldShowDropdown: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSearch: () => void;
+  onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   ref: Ref<SearchInputRef>;
 }
 
@@ -26,7 +27,8 @@ function SearchInput({
   ref,
   value,
   onChange,
-  onSearch,
+  onKeyUp,
+  onKeyDown,
   shouldShowDropdown,
 }: IProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,12 +43,6 @@ function SearchInput({
       inputRef.current?.blur();
     },
   }));
-
-  const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      onSearch();
-    }
-  };
 
   const onFocus = () => {
     setIsFocused(true);
@@ -63,6 +59,7 @@ function SearchInput({
       value={value}
       onChange={onChange}
       onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
       className={classNames(
