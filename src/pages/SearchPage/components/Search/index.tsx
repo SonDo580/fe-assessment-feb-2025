@@ -6,11 +6,13 @@ import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
 import SearchInput, { SearchInputRef } from "./SearchInput";
 import SuggestionDropdown from "./SuggestionDropdown";
+import { useDebounce } from "@/hooks/useDebounce";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get("q") || "");
   const searchInputRef = useRef<SearchInputRef>(null);
+  const debouncedKeyword = useDebounce(keyword);
 
   const shouldShowDropdown =
     !!keyword && (searchInputRef.current?.isFocused as boolean);
@@ -59,7 +61,7 @@ function Search() {
 
           {shouldShowDropdown && (
             <SuggestionDropdown
-              keyword={keyword}
+              keyword={debouncedKeyword}
               className="absolute left-0 right-0"
             />
           )}
