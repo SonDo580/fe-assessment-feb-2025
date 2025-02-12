@@ -1,47 +1,27 @@
 import classNames from "classnames";
-import { Ref, useImperativeHandle } from "react";
 
 import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
-import { suggestionEndpoint } from "@/services/api-endpoints";
-import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
 import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
 
-export interface SuggestionDropdownRef {
-  displayedSuggestions: string[];
-}
-
 interface IProps {
   className: string;
-  keyword: string;
   onSelect: (suggestion: string) => void;
   activeIndex: number;
-  ref: Ref<SuggestionDropdownRef>;
+  loading: boolean;
+  errorMsg: string;
+  data: TSuggestionResults | null;
 }
 
 function SuggestionDropdown({
   activeIndex,
-  keyword,
   className,
   onSelect,
-  ref,
+  loading,
+  errorMsg,
+  data,
 }: IProps) {
-  const { loading, data, errorMsg } = useQuery<TSuggestionResults>({
-    url: keyword && `${suggestionEndpoint}?keyword=${keyword}`,
-  });
-
-  const displayedSuggestions =
-    data?.suggestions.slice(0, NUMBER_OF_SUGGESTIONS_TO_DISPLAY) || [];
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      displayedSuggestions,
-    }),
-    [data]
-  );
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -53,6 +33,10 @@ function SuggestionDropdown({
   if (!data) {
     return;
   }
+
+  const { stemmedQueryTerm, suggestions } = data;
+  const displayedSuggestions =
+    suggestions.slice(0, NUMBER_OF_SUGGESTIONS_TO_DISPLAY) ?? [];
 
   return (
     <ul
@@ -72,7 +56,7 @@ function SuggestionDropdown({
         >
           <HighlightText
             textSegments={produceSuggestionTextSegments(
-              data.stemmedQueryTerm,
+              stemmedQueryTerm,
               suggestion
             )}
           />

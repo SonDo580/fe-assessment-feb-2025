@@ -5,11 +5,15 @@ import { useSearchParams } from "react-router-dom";
 import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
 import SearchInput, { SearchInputRef } from "./SearchInput";
-import SuggestionDropdown, {
-  SuggestionDropdownRef,
-} from "./SuggestionDropdown";
+import SuggestionDropdown from "./SuggestionDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
-import { MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS } from "@/constants";
+import {
+  MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS,
+  NUMBER_OF_SUGGESTIONS_TO_DISPLAY,
+} from "@/constants";
+import { suggestionEndpoint } from "@/services/api-endpoints";
+import { useQuery } from "@/hooks/useQuery";
+import { TSuggestionResults } from "@/types";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,15 +23,23 @@ function Search() {
   const searchInputRef = useRef<SearchInputRef>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const suggestionDropdownRef = useRef<SuggestionDropdownRef>(null);
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
-
   const shouldShowClearButton = isInputFocused && !!keyword;
   const shouldShowDropdown =
     isInputFocused && keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS;
 
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+
+  const suggestionsQueryResponse = useQuery<TSuggestionResults>({
+    url: shouldShowDropdown
+      ? `${suggestionEndpoint}?keyword=${debouncedKeyword}`
+      : "",
+  });
+
   const displayedSuggestions =
-    suggestionDropdownRef.current?.displayedSuggestions ?? [];
+    suggestionsQueryResponse.data?.suggestions.slice(
+      0,
+      NUMBER_OF_SUGGESTIONS_TO_DISPLAY
+    ) ?? [];
 
   // Reset activeSuggestionIndex when keyword changes
   useEffect(() => {
@@ -39,7 +51,7 @@ function Search() {
   };
 
   const onInputBlur = () => {
-    setIsInputFocused(true);
+    setIsInputFocused(false);
   };
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,10 +60,12 @@ function Search() {
 
   const onClearInput = () => {
     setKeyword("");
+    // setIsInputFocused(true)
     searchInputRef.current?.focus();
   };
 
   const onSearch = () => {
+    // setIsInputFocused(false)
     searchInputRef.current?.blur();
 
     if (keyword) {
@@ -62,6 +76,7 @@ function Search() {
   };
 
   const onSelectSuggestion = (suggestion: string) => {
+    // setIsInputFocused(false)
     searchInputRef.current?.blur();
 
     const newSearchParams = new URLSearchParams(searchParams);
@@ -134,11 +149,10 @@ function Search() {
 
           {shouldShowDropdown && (
             <SuggestionDropdown
-              ref={suggestionDropdownRef}
-              keyword={debouncedKeyword}
               className="absolute left-0 right-0"
               onSelect={onSelectSuggestion}
               activeIndex={activeSuggestionIndex}
+              {...suggestionsQueryResponse}
             />
           )}
         </div>

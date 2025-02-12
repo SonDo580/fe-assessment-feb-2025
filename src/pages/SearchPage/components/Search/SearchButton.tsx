@@ -20,7 +20,7 @@ function SearchButton({ onClick }: IProps) {
       <span
         className={classNames(
           "font-semibold text-[18px] leading-[26px] tracking-[0px]",
-          "hidden md:inline"
+          "hidden lg:inline"
         )}
       >
         Search
