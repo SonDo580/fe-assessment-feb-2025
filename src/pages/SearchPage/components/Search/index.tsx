@@ -60,12 +60,10 @@ function Search() {
 
   const onClearInput = () => {
     setKeyword("");
-    // setIsInputFocused(true)
     searchInputRef.current?.focus();
   };
 
   const onSearch = () => {
-    // setIsInputFocused(false)
     searchInputRef.current?.blur();
 
     if (keyword) {
@@ -76,7 +74,6 @@ function Search() {
   };
 
   const onSelectSuggestion = (suggestion: string) => {
-    // setIsInputFocused(false)
     searchInputRef.current?.blur();
 
     const newSearchParams = new URLSearchParams(searchParams);
