@@ -55,7 +55,7 @@ function SearchInput({
       onFocus={onFocus}
       onBlur={onBlur}
       className={classNames(
-        "w-full h-full py-2 pl-[22.98px] pr-8",
+        "w-full h-full py-2 pl-4 pr-8",
         "text-[#424242] text-base",
         "border-[1px] border-[#A4A4A4] rounded-l-md",
         "focus:ring-[0.5px] focus:ring-inset focus:outline-primary",

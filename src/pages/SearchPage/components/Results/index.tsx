@@ -42,7 +42,7 @@ function Results() {
   const end = start + ResultItems.length - 1;
 
   return (
-    <div className="px-40">
+    <div className="px-8 md:px-40">
       <div className="font-semibold text-[22px] leading-[28px] tracking-[0px] my-10">
         Showing {start}-{end} of {TotalNumberOfResults} results
       </div>

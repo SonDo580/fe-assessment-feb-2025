@@ -108,7 +108,7 @@ function Search() {
   };
 
   return (
-    <div className="px-40 py-10 shadow-common">
+    <div className="px-8 md:px-40 py-10 shadow-common">
       <div className="flex gap-0">
         <div className="grow relative">
           <SearchInput

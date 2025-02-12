@@ -17,7 +17,12 @@ function SearchButton({ onClick }: IProps) {
       )}
     >
       <SearchIcon />
-      <span className="font-semibold text-[18px] leading-[26px] tracking-[0px]">
+      <span
+        className={classNames(
+          "font-semibold text-[18px] leading-[26px] tracking-[0px]",
+          "hidden md:inline"
+        )}
+      >
         Search
       </span>
     </button>
