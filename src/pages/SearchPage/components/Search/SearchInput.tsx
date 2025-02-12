@@ -5,11 +5,9 @@ import {
   Ref,
   useImperativeHandle,
   useRef,
-  useState,
 } from "react";
 
 export interface SearchInputRef {
-  isFocused: boolean;
   focus: () => void;
   blur: () => void;
 }
@@ -17,6 +15,8 @@ export interface SearchInputRef {
 interface IProps {
   value: string;
   shouldShowDropdown: boolean;
+  onFocus: () => void;
+  onBlur: () => void;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -26,16 +26,16 @@ interface IProps {
 function SearchInput({
   ref,
   value,
+  onFocus,
+  onBlur,
   onChange,
   onKeyUp,
   onKeyDown,
   shouldShowDropdown,
 }: IProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    isFocused,
     focus: () => {
       inputRef.current?.focus();
     },
@@ -43,14 +43,6 @@ function SearchInput({
       inputRef.current?.blur();
     },
   }));
-
-  const onFocus = () => {
-    setIsFocused(true);
-  };
-
-  const onBlur = () => {
-    setIsFocused(false);
-  };
 
   return (
     <input

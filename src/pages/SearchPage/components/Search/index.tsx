@@ -14,17 +14,18 @@ function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get("q") || "");
   const debouncedKeyword = useDebounce(keyword);
+
   const searchInputRef = useRef<SearchInputRef>(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const suggestionDropdownRef = useRef<SuggestionDropdownRef>(null);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
-  const shouldShowClearButton =
-    !!keyword && (searchInputRef.current?.isFocused as boolean);
+  const shouldShowClearButton = isInputFocused && !!keyword;
 
   const MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS = 2;
   const shouldShowDropdown =
-    keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS &&
-    (searchInputRef.current?.isFocused as boolean);
+    isInputFocused && keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS;
 
   const displayedSuggestions =
     suggestionDropdownRef.current?.displayedSuggestions ?? [];
@@ -33,6 +34,14 @@ function Search() {
   useEffect(() => {
     setActiveSuggestionIndex(-1);
   }, [keyword]);
+
+  const onInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const onInputBlur = () => {
+    setIsInputFocused(true);
+  };
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -106,6 +115,8 @@ function Search() {
           <SearchInput
             ref={searchInputRef}
             value={keyword}
+            onFocus={onInputFocus}
+            onBlur={onInputBlur}
             onChange={onInputChange}
             onKeyUp={onKeyUp}
             onKeyDown={onKeyDown}
