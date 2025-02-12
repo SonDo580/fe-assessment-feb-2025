@@ -16,6 +16,11 @@ export function useQuery<T>({ url }: { url: string }) {
       try {
         const response = await fetch(url + "x");
         if (!response.ok) {
+          // In real application, the server typically returns an error response
+          // with some common structure. For example: 
+          // {errorCode: ..., message: ...}
+          //
+          // We are just using a general error message here 
           throw new Error(`Error fetching data`);
         }
 
