@@ -6,6 +6,7 @@ import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
 import { suggestionEndpoint } from "@/services/api-endpoints";
 import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
+import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
 
 export interface SuggestionDropdownRef {
   displayedSuggestions: string[];
@@ -30,7 +31,6 @@ function SuggestionDropdown({
     url: keyword && `${suggestionEndpoint}?keyword=${keyword}`,
   });
 
-  const NUMBER_OF_SUGGESTIONS_TO_DISPLAY = 6;
   const displayedSuggestions =
     data?.suggestions.slice(0, NUMBER_OF_SUGGESTIONS_TO_DISPLAY) || [];
 

@@ -9,6 +9,7 @@ import SuggestionDropdown, {
   SuggestionDropdownRef,
 } from "./SuggestionDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
+import { MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS } from "@/constants";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,8 +23,6 @@ function Search() {
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
   const shouldShowClearButton = isInputFocused && !!keyword;
-
-  const MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS = 2;
   const shouldShowDropdown =
     isInputFocused && keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS;
 
