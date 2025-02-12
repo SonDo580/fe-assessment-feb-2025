@@ -89,18 +89,15 @@ function Search() {
     }
 
     // Loop back when reach boundary
+    // Handle index -1
+    const n = displayedSuggestions.length;
+
     if (e.key === "ArrowDown") {
       e.preventDefault(); // avoid moving across input string
-
-      setActiveSuggestionIndex(
-        (prev) => (prev + 1) % displayedSuggestions.length
-      );
+      setActiveSuggestionIndex((prev) => (prev === n - 1 ? -1 : prev + 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault(); // avoid moving across input string
-
-      setActiveSuggestionIndex((prev) =>
-        prev <= 0 ? displayedSuggestions.length - 1 : prev - 1
-      );
+      setActiveSuggestionIndex((prev) => (prev === -1 ? n - 1 : prev - 1));
     }
   };
 
