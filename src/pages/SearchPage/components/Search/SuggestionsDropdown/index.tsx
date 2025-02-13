@@ -4,7 +4,7 @@ import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
 import { TSuggestionResults } from "@/types";
 import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
-import SuggestionsWrapper from "./SuggestionsWrapper";
+import SuggestionsWrapper from "../SuggestionsWrapper";
 
 interface IProps {
   className: string;
