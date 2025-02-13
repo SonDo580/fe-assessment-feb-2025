@@ -1,16 +1,5 @@
 import classNames from "classnames";
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  Ref,
-  useImperativeHandle,
-  useRef,
-} from "react";
-
-export interface SearchInputRef {
-  focus: () => void;
-  blur: () => void;
-}
+import { ChangeEvent, KeyboardEvent, Ref } from "react";
 
 interface IProps {
   value: string;
@@ -20,7 +9,7 @@ interface IProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
   onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  ref: Ref<SearchInputRef>;
+  ref: Ref<HTMLInputElement>;
 }
 
 function SearchInput({
@@ -33,21 +22,10 @@ function SearchInput({
   onKeyDown,
   shouldShowDropdown,
 }: IProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      inputRef.current?.focus();
-    },
-    blur: () => {
-      inputRef.current?.blur();
-    },
-  }));
-
   return (
     <input
       type="text"
-      ref={inputRef}
+      ref={ref}
       value={value}
       onChange={onChange}
       onKeyUp={onKeyUp}

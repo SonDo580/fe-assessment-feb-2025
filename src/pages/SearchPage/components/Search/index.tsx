@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
-import SearchInput, { SearchInputRef } from "./SearchInput";
+import SearchInput from "./SearchInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
@@ -19,7 +19,7 @@ function Search() {
   const [keyword, setKeyword] = useState(searchParams.get("q") || "");
   const debouncedKeyword = useDebounce(keyword);
 
-  const searchInputRef = useRef<SearchInputRef>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const shouldShowClearButton = isInputFocused && !!keyword;
