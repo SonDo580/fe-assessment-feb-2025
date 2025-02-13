@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -134,10 +133,7 @@ function Search() {
           {shouldShowClearButton && (
             <ClearButton
               onClick={onClearInput}
-              className={classNames(
-                "absolute right-2 top-1/2 -translate-y-1/2",
-                "cursor-pointer"
-              )}
+              className="absolute right-2 top-1/2 -translate-y-1/2"
             />
           )}
 
