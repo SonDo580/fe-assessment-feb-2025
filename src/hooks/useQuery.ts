@@ -14,7 +14,7 @@ export function useQuery<T>({ url }: { url: string }) {
       setLoading(true);
 
       try {
-        const response = await fetch(url + "x");
+        const response = await fetch(url);
         if (!response.ok) {
           // In real application, the server typically returns an error response
           // with some common structure. For example: 
