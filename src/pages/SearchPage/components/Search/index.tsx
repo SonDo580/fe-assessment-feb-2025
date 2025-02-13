@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
 import SearchInput, { SearchInputRef } from "./SearchInput";
-import SuggestionDropdown from "./SuggestionDropdown";
+import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
   MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS,
@@ -89,7 +89,7 @@ function Search() {
     }
 
     // Loop back when reach boundary
-    // Handle index -1
+    // Allow index -1 for the input value
     const n = displayedSuggestions.length;
 
     if (e.key === "ArrowDown") {
@@ -142,7 +142,7 @@ function Search() {
           )}
 
           {shouldShowDropdown && (
-            <SuggestionDropdown
+            <SuggestionsDropdown
               className="absolute left-0 right-0"
               onSelect={onSelectSuggestion}
               activeIndex={activeSuggestionIndex}
