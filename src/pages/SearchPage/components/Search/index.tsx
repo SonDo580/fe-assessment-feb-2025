@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 
@@ -58,9 +58,9 @@ function Search() {
     setKeyword(e.target.value);
   };
 
-  const onClearInput = () => {
+  const onClearInput = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault() // prevent input from losing focus
     setKeyword("");
-    searchInputRef.current?.focus();
   };
 
   const onSearch = () => {
@@ -130,7 +130,7 @@ function Search() {
           />
 
           <ClearButton
-            onClick={onClearInput}
+            onClearInput={onClearInput}
             className={classNames(
               "absolute right-2 top-1/2 -translate-y-1/2",
               !shouldShowClearButton && "hidden"
