@@ -65,7 +65,7 @@ function SuggestionDropdown({
               "px-6 py-3 hover:cursor-pointer hover:bg-slate-100",
               activeIndex === index && "bg-slate-100"
             )}
-            onClick={() => onSelect(suggestion)}
+            onMouseDown={() => onSelect(suggestion)}
           >
             <HighlightText
               textSegments={produceSuggestionTextSegments(

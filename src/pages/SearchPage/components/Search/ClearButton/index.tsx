@@ -10,7 +10,7 @@ interface IProps {
 function ClearButton({ className, onClick }: IProps) {
   return (
     <button
-      onClick={onClick}
+      onMouseDown={onClick}
       className={classNames(className, "cursor-pointer")}
     >
       <CloseIcon />

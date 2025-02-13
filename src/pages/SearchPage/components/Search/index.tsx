@@ -1,5 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import classNames from "classnames";
 
 import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
@@ -22,7 +23,7 @@ function Search() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const shouldShowClearButton = isInputFocused && !!keyword;
+  const shouldShowClearButton = isInputFocused && keyword.length > 0;
   const shouldShowDropdown =
     isInputFocused && keyword.length >= MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS;
 
@@ -73,8 +74,6 @@ function Search() {
   };
 
   const onSelectSuggestion = (suggestion: string) => {
-    searchInputRef.current?.blur();
-
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("q", suggestion);
     setSearchParams(newSearchParams);
@@ -130,21 +129,23 @@ function Search() {
             shouldShowDropdown={shouldShowDropdown}
           />
 
-          {shouldShowClearButton && (
-            <ClearButton
-              onClick={onClearInput}
-              className="absolute right-2 top-1/2 -translate-y-1/2"
-            />
-          )}
+          <ClearButton
+            onClick={onClearInput}
+            className={classNames(
+              "absolute right-2 top-1/2 -translate-y-1/2",
+              !shouldShowClearButton && "hidden"
+            )}
+          />
 
-          {shouldShowDropdown && (
-            <SuggestionsDropdown
-              className="absolute left-0 right-0"
-              onSelect={onSelectSuggestion}
-              activeIndex={activeSuggestionIndex}
-              {...suggestionsQueryResponse}
-            />
-          )}
+          <SuggestionsDropdown
+            onSelect={onSelectSuggestion}
+            activeIndex={activeSuggestionIndex}
+            {...suggestionsQueryResponse}
+            className={classNames(
+              "absolute left-0 right-0",
+              !shouldShowDropdown && "hidden"
+            )}
+          />
         </div>
 
         <SearchButton onClick={onSearch} />
