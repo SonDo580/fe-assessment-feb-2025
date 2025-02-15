@@ -1,5 +1,3 @@
-import { describe, it, expect } from "vitest";
-
 import { THighlightOffset, TTextSegment } from "@/types";
 import {
   produceDocumentTextSegments,
@@ -19,7 +17,7 @@ describe("Test produceDocumentTextSegments", () => {
       },
     ];
 
-    expect(result).toEqual(expectedResult);
+    expect(result).toStrictEqual(expectedResult);
   });
 
   it("should split text into normal and highlighted segments", () => {
@@ -59,7 +57,7 @@ describe("Test produceDocumentTextSegments", () => {
       },
     ];
 
-    expect(result).toEqual(expectedResult);
+    expect(result).toStrictEqual(expectedResult);
   });
 });
 
@@ -76,7 +74,7 @@ describe("Test produceSuggestionTextSegments", () => {
       },
     ];
 
-    expect(result).toEqual(expectedResult);
+    expect(result).toStrictEqual(expectedResult);
   });
 
   it("should split text into normal and highlighted segments", () => {
@@ -107,6 +105,6 @@ describe("Test produceSuggestionTextSegments", () => {
       },
     ];
 
-    expect(result).toEqual(expectedResult);
+    expect(result).toStrictEqual(expectedResult);
   });
 });
