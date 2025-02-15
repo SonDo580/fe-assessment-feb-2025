@@ -9,7 +9,6 @@ import {
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 
-import SearchButton from "./SearchButton";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
@@ -20,6 +19,7 @@ import { suggestionEndpoint } from "@/services/api-endpoints";
 import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
 import CloseIcon from "@/components/icons/CloseIcon";
+import SearchIcon from "@/components/icons/SearchIcon";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -124,6 +124,7 @@ function Search() {
     <div className="px-8 md:px-40 py-10 shadow-common">
       <div className="flex gap-0">
         <div className="grow relative">
+          {/* Search input */}
           <input
             type="text"
             ref={searchInputRef}
@@ -142,6 +143,7 @@ function Search() {
             )}
           />
 
+          {/* Clear button */}
           <button
             onMouseDown={onClearInput}
             className={classNames(
@@ -163,7 +165,20 @@ function Search() {
           />
         </div>
 
-        <SearchButton onClick={onSearch} />
+        {/* Search button */}
+        <button
+          onClick={onSearch}
+          className={classNames(
+            "bg-primary text-white rounded-md px-8 py-4 -ml-1 z-10",
+            "flex justify-center items-center gap-2",
+            "hover:cursor-pointer hover:bg-blue-500"
+          )}
+        >
+          <SearchIcon />
+          <span className="font-semibold text-[18px] leading-[26px] hidden lg:inline">
+            Search
+          </span>
+        </button>
       </div>
     </div>
   );
