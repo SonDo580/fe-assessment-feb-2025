@@ -4,7 +4,6 @@ import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
 import { TSuggestionResults } from "@/types";
 import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
-import SuggestionsWrapper from "../SuggestionsWrapper";
 
 interface IProps {
   className: string;
@@ -23,19 +22,20 @@ function SuggestionDropdown({
   errorMsg,
   data,
 }: IProps) {
+  const wrapperClassNames = classNames(
+    className,
+    "rounded-b-md shadow-common bg-white"
+  );
+
   if (loading) {
-    return (
-      <SuggestionsWrapper className={className}>
-        <div>Loading...</div>
-      </SuggestionsWrapper>
-    );
+    return <div className={wrapperClassNames}>Loading...</div>;
   }
 
   if (errorMsg) {
     return (
-      <SuggestionsWrapper className={className}>
-        <div className="text-red-700">{errorMsg}</div>
-      </SuggestionsWrapper>
+      <div className={classNames(wrapperClassNames, "text-red-700")}>
+        {errorMsg}
+      </div>
     );
   }
 
@@ -49,14 +49,15 @@ function SuggestionDropdown({
 
   if (displayedSuggestions.length === 0) {
     return (
-      <SuggestionsWrapper className={className}>
-        <div>No suggestions found</div>
-      </SuggestionsWrapper>
+      <div className={wrapperClassNames}>
+        No suggestions found for{" "}
+        <span className="font-bold">{stemmedQueryTerm}</span>
+      </div>
     );
   }
 
   return (
-    <SuggestionsWrapper className={className} noData={false}>
+    <div className={classNames(wrapperClassNames, "p-4")}>
       <ul className="flex flex-col">
         {displayedSuggestions.map((suggestion, index) => (
           <li
@@ -76,7 +77,7 @@ function SuggestionDropdown({
           </li>
         ))}
       </ul>
-    </SuggestionsWrapper>
+    </div>
   );
 }
 
