@@ -12,7 +12,7 @@ export function useDebounce<T>(value: T, milliseconds: number = 500): T {
       // Reset if value changes before delay
       clearTimeout(timeoutId);
     };
-  }, [value]);
+  }, [value, milliseconds]);
 
   return debouncedValue;
 }

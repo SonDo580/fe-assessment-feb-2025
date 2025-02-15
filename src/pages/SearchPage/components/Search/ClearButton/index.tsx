@@ -1,7 +1,7 @@
+import { MouseEvent } from "react";
 import classNames from "classnames";
 
 import CloseIcon from "@/components/icons/CloseIcon";
-import { MouseEvent } from "react";
 
 interface IProps {
   className: string;
