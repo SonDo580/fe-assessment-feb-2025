@@ -9,7 +9,6 @@ import {
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 
-import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -20,6 +19,7 @@ import {
 import { suggestionEndpoint } from "@/services/api-endpoints";
 import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
+import CloseIcon from "@/components/icons/CloseIcon";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -142,13 +142,15 @@ function Search() {
             )}
           />
 
-          <ClearButton
-            onClearInput={onClearInput}
+          <button
+            onMouseDown={onClearInput}
             className={classNames(
-              "absolute right-2 top-1/2 -translate-y-1/2",
+              "absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer",
               !shouldShowClearButton && "hidden"
             )}
-          />
+          >
+            <CloseIcon />
+          </button>
 
           <SuggestionsDropdown
             onSelect={onSelectSuggestion}
