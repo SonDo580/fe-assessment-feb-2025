@@ -1,6 +1,10 @@
-import { THighlightOffset, TTextSegment } from "@/types";
 import { describe, it, expect } from "vitest";
-import { produceDocumentTextSegments } from "./produce-text-segments";
+
+import { THighlightOffset, TTextSegment } from "@/types";
+import {
+  produceDocumentTextSegments,
+  produceSuggestionTextSegments,
+} from "./produce-text-segments";
 
 describe("Test produceDocumentTextSegments", () => {
   it("should return full normal text if there are no highlights", () => {
@@ -8,7 +12,6 @@ describe("Test produceDocumentTextSegments", () => {
     const highlights: THighlightOffset[] = [];
 
     const result = produceDocumentTextSegments(text, highlights);
-
     const expectedResult: TTextSegment[] = [
       {
         text,
@@ -21,13 +24,16 @@ describe("Test produceDocumentTextSegments", () => {
 
   it("should split text into normal and highlighted segments", () => {
     const text = "Hello world. This is a test!";
-    const highlights: THighlightOffset[] = [{
+    const highlights: THighlightOffset[] = [
+      {
         BeginOffset: 6,
         EndOffset: 11,
-    }, {
+      },
+      {
         BeginOffset: 18,
         EndOffset: 20,
-    }];
+      },
+    ];
 
     const result = produceDocumentTextSegments(text, highlights);
     const expectedResult: TTextSegment[] = [
@@ -54,5 +60,53 @@ describe("Test produceDocumentTextSegments", () => {
     ];
 
     expect(result).toEqual(expectedResult);
-  })
+  });
+});
+
+describe("Test produceSuggestionTextSegments", () => {
+  it("should return full normal text if there are no matches", () => {
+    const queryTerm = "child";
+    const suggestion = "I'm an adult";
+
+    const result = produceSuggestionTextSegments(queryTerm, suggestion);
+    const expectedResult: TTextSegment[] = [
+      {
+        text: suggestion,
+        shouldHighlight: false,
+      },
+    ];
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  it("should split text into normal and highlighted segments", () => {
+    const queryTerm = "cat";
+    const suggestion = "The cat is catching a mouse";
+
+    const result = produceSuggestionTextSegments(queryTerm, suggestion);
+    const expectedResult: TTextSegment[] = [
+      {
+        text: "The ",
+        shouldHighlight: false,
+      },
+      {
+        text: "cat",
+        shouldHighlight: true,
+      },
+      {
+        text: " is ",
+        shouldHighlight: false,
+      },
+      {
+        text: "cat",
+        shouldHighlight: true,
+      },
+      {
+        text: "ching a mouse",
+        shouldHighlight: false,
+      },
+    ];
+
+    expect(result).toEqual(expectedResult);
+  });
 });
