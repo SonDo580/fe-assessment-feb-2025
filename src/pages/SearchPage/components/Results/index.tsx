@@ -1,10 +1,10 @@
 import { useSearchParams } from "react-router-dom";
+import classNames from "classnames";
 
 import { useQuery } from "@/hooks/useQuery";
 import { searchEndpoint } from "@/services/api-endpoints";
 import { TSeachResults } from "@/types";
 import ResultItem from "./ResultItem";
-import ResultsWrapper from "./ResultsWrapper";
 
 function Results() {
   const [searchParams] = useSearchParams();
@@ -14,23 +14,23 @@ function Results() {
     url: keyword && `${searchEndpoint}?keyword=${keyword}`,
   });
 
+  const wrapperClassNames = "px-8 md:px-40 pt-10";
+
   if (!keyword) {
     return;
   }
 
   if (loading) {
     return (
-      <ResultsWrapper>
-        <div className="text-xl">Loading...</div>
-      </ResultsWrapper>
+      <div className={classNames(wrapperClassNames, "text-xl")}>Loading...</div>
     );
   }
 
   if (errorMsg) {
     return (
-      <ResultsWrapper>
-        <div className="text-xl text-red-700">{errorMsg}</div>
-      </ResultsWrapper>
+      <div className={classNames(wrapperClassNames, "text-xl text-red-700")}>
+        {errorMsg}
+      </div>
     );
   }
 
@@ -41,11 +41,9 @@ function Results() {
   const { TotalNumberOfResults, Page, PageSize, ResultItems } = data;
   if (TotalNumberOfResults === 0) {
     return (
-      <ResultsWrapper>
-        <div className="text-xl">
-          No results found for <span className="font-bold">keyword</span>
-        </div>
-      </ResultsWrapper>
+      <div className={classNames(wrapperClassNames, "text-xl")}>
+        No results found for <span className="font-bold">{keyword}</span>
+      </div>
     );
   }
 
@@ -53,7 +51,7 @@ function Results() {
   const end = start + ResultItems.length - 1;
 
   return (
-    <ResultsWrapper>
+    <div className={wrapperClassNames}>
       <div className="font-semibold text-[22px] leading-[28px] tracking-[0px] mb-10">
         Showing {start}-{end} of {TotalNumberOfResults} results
       </div>
@@ -63,7 +61,7 @@ function Results() {
           <ResultItem key={item.DocumentId} item={item} />
         ))}
       </div>
-    </ResultsWrapper>
+    </div>
   );
 }
 
