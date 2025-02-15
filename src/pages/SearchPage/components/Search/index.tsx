@@ -1,10 +1,16 @@
-import { ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 
 import ClearButton from "./ClearButton";
 import SearchButton from "./SearchButton";
-import SearchInput from "./SearchInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
@@ -59,7 +65,7 @@ function Search() {
   };
 
   const onClearInput = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault() // prevent input from losing focus
+    e.preventDefault(); // prevent input from losing focus
     setKeyword("");
   };
 
@@ -118,15 +124,22 @@ function Search() {
     <div className="px-8 md:px-40 py-10 shadow-common">
       <div className="flex gap-0">
         <div className="grow relative">
-          <SearchInput
+          <input
+            type="text"
             ref={searchInputRef}
             value={keyword}
-            onFocus={onInputFocus}
-            onBlur={onInputBlur}
             onChange={onInputChange}
             onKeyUp={onKeyUp}
             onKeyDown={onKeyDown}
-            shouldShowDropdown={shouldShowDropdown}
+            onFocus={onInputFocus}
+            onBlur={onInputBlur}
+            className={classNames(
+              "w-full h-full py-2 pl-4 pr-8",
+              "text-[#424242] text-base",
+              "border-[1px] border-[rgb(164,164,164)] rounded-l-md",
+              "focus:outline-none focus:border-primary",
+              shouldShowDropdown && "rounded-bl-none"
+            )}
           />
 
           <ClearButton
