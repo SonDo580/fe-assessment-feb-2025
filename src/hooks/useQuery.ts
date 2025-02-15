@@ -43,4 +43,8 @@ export function useQuery<T>({ url }: { url: string }) {
   };
 }
 
-/* => Improvement: accept search params, path params,... */
+/**
+ * Improvement: 
+ * - accept search params, path params, headers, response transformer... 
+ * - extend for other methods: accept method, request body,...
+ */
