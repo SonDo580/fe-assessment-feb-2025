@@ -42,6 +42,28 @@ npm run dev
 
 4. Open the browser and go to http://localhost:5173
 
+## Testing
+
+This project use Vistest, React Testing Library, and Mock Service Worker for testing.
+
+1. To run the tests:
+
+```bash
+npm test
+```
+
+2. To generate a test coverage report
+
+```bash
+npm test -- --coverage
+```
+
+3. View the HTML report in your browser (after generation)
+
+```bash
+open coverage/index.html
+```
+
 ## Note on implementation:
 
 1. In real application, the server returns the correct response. So I use the mock response as is to display results without filtering for items that really contains keyword.
