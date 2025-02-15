@@ -1,9 +1,8 @@
 import classNames from "classnames";
 
-import HighlightText from "@/components/ui/HighlightText";
-import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
 import { TSuggestionResults } from "@/types";
 import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
+import SuggestionItem from "../SuggestionItem";
 
 interface IProps {
   className: string;
@@ -60,21 +59,13 @@ function SuggestionDropdown({
     <div className={classNames(wrapperClassNames, "p-4")}>
       <ul className="flex flex-col">
         {displayedSuggestions.map((suggestion, index) => (
-          <li
+          <SuggestionItem
             key={index}
-            className={classNames(
-              "px-6 py-3 hover:cursor-pointer hover:bg-slate-100",
-              activeIndex === index && "bg-slate-100"
-            )}
-            onMouseDown={() => onSelect(suggestion)}
-          >
-            <HighlightText
-              textSegments={produceSuggestionTextSegments(
-                stemmedQueryTerm,
-                suggestion
-              )}
-            />
-          </li>
+            active={activeIndex === index}
+            suggestion={suggestion}
+            queryTerm={stemmedQueryTerm}
+            onSelect={onSelect}
+          />
         ))}
       </ul>
     </div>
