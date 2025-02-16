@@ -165,6 +165,7 @@ function Search() {
 
         {/* Search button */}
         <button
+          aria-label="search-btn"
           onClick={onSearch}
           className={classNames(
             "bg-primary text-white rounded-md px-8 py-4 -ml-1 z-10",
