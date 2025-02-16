@@ -79,7 +79,7 @@ describe("Test produceSuggestionTextSegments", () => {
 
   it("should split text into normal and highlighted segments", () => {
     const queryTerm = "cat";
-    const suggestion = "The cat is catching a mouse";
+    const suggestion = "The Cat is catching a mouse";
 
     const result = produceSuggestionTextSegments(queryTerm, suggestion);
     const expectedResult: TTextSegment[] = [
@@ -88,7 +88,7 @@ describe("Test produceSuggestionTextSegments", () => {
         shouldHighlight: false,
       },
       {
-        text: "cat",
+        text: "Cat",
         shouldHighlight: true,
       },
       {

@@ -57,7 +57,7 @@ export const produceSuggestionTextSegments = (
         shouldHighlight: false,
       },
       {
-        text: queryTerm,
+        text: suggestion.slice(matchIndex, matchIndex + queryTerm.length),
         shouldHighlight: true,
       }
     );
