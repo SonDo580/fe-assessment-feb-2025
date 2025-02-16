@@ -49,10 +49,12 @@ describe("Search component", () => {
   });
 
   describe("Search component - search button behavior", () => {
-    it("should blur input and update search params if input is not empty when clicked", async () => {
+    const BTN_LABEL_TEXT = "search-btn";
+
+    it("blur input and update search params when input is not empty", async () => {
       render(<Search />);
 
-      const searchButton = screen.getByLabelText("search-btn");
+      const searchButton = screen.getByLabelText(BTN_LABEL_TEXT);
       await userEvent.click(searchButton);
 
       expect(blurSpy).toHaveBeenCalledOnce();
@@ -69,6 +71,49 @@ describe("Search component", () => {
       expect(mockSetSearchParams).toHaveBeenCalledWith(
         new URLSearchParams(`q=${inputValue}`)
       );
+    });
+  });
+
+  describe("Search component - clear button behavior", () => {
+    const BTN_LABEL_TEXT = "clear-btn";
+
+    it("render and clear input when clicked if input is focused and has value", async () => {
+      render(<Search />);
+
+      const input = screen.getByRole("textbox");
+
+      // Clear button should not be rendered initially
+      let clearButton = screen.queryByLabelText(BTN_LABEL_TEXT);
+      expect(clearButton).toBeNull();
+
+      // Focus on input but leave it empty
+      // -> clear should still not be rendered
+      await userEvent.click(input);
+      clearButton = screen.queryByLabelText(BTN_LABEL_TEXT);
+      expect(clearButton).toBeNull();
+
+      // Type text into input
+      // -> clear button should appear
+      const inputValue = "test";
+      await userEvent.type(input, inputValue);
+      clearButton = screen.getByLabelText(BTN_LABEL_TEXT);
+
+      // Blur input (value remains)
+      // -> clear button should disappear
+      await userEvent.tab();
+      clearButton = screen.queryByLabelText(BTN_LABEL_TEXT);
+      expect(clearButton).toBeNull();
+
+      // Focus on input again
+      // -> clear button should re-appear
+      await userEvent.click(input);
+      clearButton = screen.getByLabelText(BTN_LABEL_TEXT);
+
+      // Click clear button
+      // -> The input should be cleared but still focused
+      await userEvent.click(clearButton);
+      expect(input).toHaveValue("");
+      expect(input).toHaveFocus();
     });
   });
 });
