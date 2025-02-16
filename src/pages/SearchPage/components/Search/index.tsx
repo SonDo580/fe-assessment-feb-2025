@@ -12,6 +12,7 @@ import classNames from "classnames";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
+  KeyboardKeys,
   MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS,
   NUMBER_OF_SUGGESTIONS_TO_DISPLAY,
 } from "@/constants";
@@ -96,10 +97,10 @@ function Search() {
     // Allow index -1 for the input value
     const n = displayedSuggestions.length;
 
-    if (e.key === "ArrowDown") {
+    if (e.key === KeyboardKeys.ARROW_DOWN) {
       e.preventDefault(); // avoid moving across input string
       setActiveSuggestionIndex((prev) => (prev === n - 1 ? -1 : prev + 1));
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === KeyboardKeys.ARROW_UP) {
       e.preventDefault(); // avoid moving across input string
       setActiveSuggestionIndex((prev) => (prev === -1 ? n - 1 : prev - 1));
     }
@@ -107,7 +108,7 @@ function Search() {
 
   // Handle selecting suggestions or original keyword by keyboard
   const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") {
+    if (e.key !== KeyboardKeys.ENTER) {
       return;
     }
 

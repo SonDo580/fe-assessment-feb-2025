@@ -1,15 +1,14 @@
 import { useSearchParams } from "react-router-dom";
 import { Mock } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
+import { KeyboardKeys, MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS } from "@/constants";
 import Search from ".";
-import { MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS } from "@/constants";
 
 const SUGGESTION_DROPDOWN_TEST_ID = "SuggestionsDropdown";
-
 vi.mock("./SuggestionsDropdown", () => ({
   default: () => <div data-testid={SUGGESTION_DROPDOWN_TEST_ID} />,
 }));
@@ -19,30 +18,45 @@ vi.mock("react-router-dom", () => ({
 }));
 const mockUseSearchParams = useSearchParams as Mock;
 const mockSetSearchParams = vi.fn();
-const mockUseSearchParamsReturnValue = [
-  new URLSearchParams(""),
-  mockSetSearchParams,
-]; // default
 
 vi.mock("@/hooks/useQuery", () => ({
   useQuery: vi.fn(),
 }));
 const mockUseQuery = useQuery as Mock;
 type UseQueryReturnType = ReturnType<typeof useQuery<TSuggestionResults>>;
+
+// Default mock return values
+const mockUseSearchParamsReturnValue = [
+  new URLSearchParams(""),
+  mockSetSearchParams,
+];
 const mockUseQueryReturnValue: UseQueryReturnType = {
   loading: false,
   errorMsg: "",
   data: null,
-}; // default
+};
 
 // Helper to generate random text with certain length
-const generateRandomText = (length: number) => {
+const generateRandomText = (length: number): string => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   let text = "";
   for (let i = 0; i < length; i++) {
     text += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
   }
   return text;
+};
+
+// Helper to wrap the key in {} to use in userEvents.keyboard
+const getWrappedKeyboardKey = (key: KeyboardKeys): string => `{${key}}`;
+
+// Helper to generate URLSeachParams (for only keyword)
+const getURLSeachParams = (keyword: string): URLSearchParams =>
+  new URLSearchParams(`q=${keyword}`);
+
+const WrappedKeys = {
+  ENTER: getWrappedKeyboardKey(KeyboardKeys.ENTER),
+  ARROW_UP: getWrappedKeyboardKey(KeyboardKeys.ARROW_UP),
+  ARROW_DOWN: getWrappedKeyboardKey(KeyboardKeys.ARROW_DOWN),
 };
 
 describe("Search component", () => {
@@ -57,6 +71,94 @@ describe("Search component", () => {
   afterEach(() => {
     blurSpy.mockRestore();
     vi.resetAllMocks();
+  });
+
+  describe("Search component - input behavior", () => {
+    it("should be empty initially if search param have no value", () => {
+      render(<Search />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveValue("");
+    });
+
+    it("should populate with value from search param initially", () => {
+      const keyword = "test";
+      mockUseSearchParams.mockReturnValue([
+        new URLSearchParams(`q=${keyword}`),
+        mockSetSearchParams,
+      ]);
+
+      render(<Search />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveValue(keyword);
+    });
+
+    it("should update input value when typing", async () => {
+      render(<Search />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveValue("");
+
+      const inputValue = "test";
+      await userEvent.type(input, "test");
+      expect(input).toHaveValue(inputValue);
+    });
+
+    it("should handle keyboard events correctly", async () => {
+      const mockSuggestions: string[] = ["zero", "zebra", "zet"];
+      const mockUseQueryReturnValue: UseQueryReturnType = {
+        loading: false,
+        errorMsg: "",
+        data: {
+          stemmedQueryTerm: "ze",
+          suggestions: mockSuggestions,
+        },
+      };
+      mockUseQuery.mockReturnValue(mockUseQueryReturnValue);
+
+      render(<Search />);
+      const input = screen.getByRole("textbox");
+      const inputValue = generateRandomText(MIN_KEYWORD_LENGTH_FOR_SUGGESTIONS);
+      await userEvent.type(input, inputValue);
+
+      // Press Enter 
+      // -> + trigger search param update 
+      //    + input lose focus
+      await userEvent.keyboard(WrappedKeys.ENTER);
+      expect(mockSetSearchParams).toHaveBeenCalledWith(
+        getURLSeachParams(inputValue)
+      );
+      await waitFor(() => expect(input).not.toHaveFocus());
+
+      // Focus on input again and press ArrowUp once
+      // -> activeSuggestionIndex changes from -1 to 2
+      await userEvent.click(input);
+      await userEvent.keyboard(WrappedKeys.ARROW_UP);
+
+      // Press Enter
+      // -> + trigger search param update
+      //    + input value update & input lose focus
+      await userEvent.keyboard(WrappedKeys.ENTER);
+      expect(mockSetSearchParams).toHaveBeenCalledWith(
+        getURLSeachParams(mockSuggestions[2])
+      );
+      expect(input).toHaveValue(mockSuggestions[2]);
+      await waitFor(() => expect(input).not.toHaveFocus());
+
+      // Focus on input again and press ArrowDown 2 times
+      // -> activeSuggestionIndex changes from 2 to -1 to 0
+      await userEvent.click(input);
+      await userEvent.keyboard(WrappedKeys.ARROW_DOWN);
+      await userEvent.keyboard(WrappedKeys.ARROW_DOWN);
+
+      // Press Enter
+      // -> + trigger search param update
+      //    + input value update & input lose focus
+      await userEvent.keyboard(WrappedKeys.ENTER);
+      expect(mockSetSearchParams).toHaveBeenCalledWith(
+        getURLSeachParams(mockSuggestions[0])
+      );
+      expect(input).toHaveValue(mockSuggestions[0]);
+      await waitFor(() => expect(input).not.toHaveFocus());
+    });
   });
 
   describe("Search component - search button behavior", () => {
@@ -76,12 +178,14 @@ describe("Search component", () => {
       const input = screen.getByRole("textbox");
       await userEvent.type(input, inputValue);
 
+      // Click search button again
+      // -> trigger search param update & input lose focus
       await userEvent.click(searchButton);
-
       expect(blurSpy).toHaveBeenCalledTimes(2);
       expect(mockSetSearchParams).toHaveBeenCalledWith(
-        new URLSearchParams(`q=${inputValue}`)
+        getURLSeachParams(inputValue)
       );
+      expect(input).not.toHaveFocus();
     });
   });
 
