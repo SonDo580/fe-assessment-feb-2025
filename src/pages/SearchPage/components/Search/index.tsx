@@ -81,6 +81,8 @@ function Search() {
   };
 
   const onSelectSuggestion = (suggestion: string) => {
+    searchInputRef.current?.blur();
+
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("q", suggestion);
     setSearchParams(newSearchParams);
