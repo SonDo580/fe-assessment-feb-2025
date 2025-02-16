@@ -144,25 +144,23 @@ function Search() {
           />
 
           {/* Clear button */}
-          <button
-            onMouseDown={onClearInput}
-            className={classNames(
-              "absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer",
-              !shouldShowClearButton && "hidden"
-            )}
-          >
-            <CloseIcon />
-          </button>
+          {shouldShowClearButton && (
+            <button
+              onMouseDown={onClearInput}
+              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            >
+              <CloseIcon />
+            </button>
+          )}
 
-          <SuggestionsDropdown
-            onSelect={onSelectSuggestion}
-            activeIndex={activeSuggestionIndex}
-            {...suggestionsQueryResponse}
-            className={classNames(
-              "absolute left-0 right-0",
-              !shouldShowDropdown && "hidden"
-            )}
-          />
+          {shouldShowDropdown && (
+            <SuggestionsDropdown
+              onSelect={onSelectSuggestion}
+              activeIndex={activeSuggestionIndex}
+              {...suggestionsQueryResponse}
+              className="absolute left-0 right-0"
+            />
+          )}
         </div>
 
         {/* Search button */}
