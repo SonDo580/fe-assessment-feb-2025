@@ -5,7 +5,7 @@ import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
 import HighlightText from "@/components/ui/HighlightText";
 import { produceSuggestionTextSegments } from "@/utils/produce-text-segments";
 
-interface IProps {
+export interface IProps {
   className: string;
   onSelect: (suggestion: string) => void;
   activeIndex: number;
