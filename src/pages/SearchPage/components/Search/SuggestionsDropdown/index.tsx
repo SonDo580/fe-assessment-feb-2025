@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { twMerge } from "tailwind-merge";
 
 import { TSuggestionResults } from "@/types";
 import { NUMBER_OF_SUGGESTIONS_TO_DISPLAY } from "@/constants";
@@ -24,7 +25,7 @@ function SuggestionDropdown({
 }: IProps) {
   const wrapperClassNames = classNames(
     className,
-    "rounded-b-md shadow-common bg-white"
+    "rounded-b-md shadow-common bg-white p-4"
   );
 
   if (loading) {
@@ -57,7 +58,7 @@ function SuggestionDropdown({
   }
 
   return (
-    <div className={classNames(wrapperClassNames, "p-4")}>
+    <div className={twMerge(wrapperClassNames, "p-0")}>
       <ul className="flex flex-col">
         {displayedSuggestions.map((suggestion, index) => (
           <li
