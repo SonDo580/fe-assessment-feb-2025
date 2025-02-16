@@ -71,5 +71,5 @@ open coverage/index.html
 2. When handle clearing input by clicking clear button and select suggestion from the the suggestions dropdown, I use onMouseDown instead of onClick (because of the order in which events are fires).
 
 - When we click on ClearButton / SuggestionItem, the `blur` event on SearchInput is triggered, which set the `isInputFocused` state to `false`
-- The ClearButton / SuggestionsDropdown is applied `visibility: hidden` style. So the `click` event will not fired on those elements.
+- The ClearButton / SuggestionsDropdown is unmounted. So the `click` event will not fired on those elements.
 - But the `mousedown` event fires before the `blur` event. That's why I have to listen to it.
