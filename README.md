@@ -55,7 +55,7 @@ npm test
 2. To generate a test coverage report
 
 ```bash
-npm test -- --coverage
+npm run test:coverage
 ```
 
 3. View the HTML report in your browser (after generation)
