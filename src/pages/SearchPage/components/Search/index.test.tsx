@@ -136,6 +136,7 @@ describe("Search component", () => {
       // Press Enter
       // -> + trigger search param update
       //    + input value update & input lose focus
+      //    + activeSuggestionIndex is reset to -1
       await userEvent.keyboard(WrappedKeys.ENTER);
       expect(mockSetSearchParams).toHaveBeenCalledWith(
         getURLSeachParams(mockSuggestions[2])
@@ -144,7 +145,7 @@ describe("Search component", () => {
       await waitFor(() => expect(input).not.toHaveFocus());
 
       // Focus on input again and press ArrowDown 2 times
-      // -> activeSuggestionIndex changes from 2 to -1 to 0
+      // -> activeSuggestionIndex changes from -1 to 0 to 1
       await userEvent.click(input);
       await userEvent.keyboard(WrappedKeys.ARROW_DOWN);
       await userEvent.keyboard(WrappedKeys.ARROW_DOWN);
@@ -152,11 +153,12 @@ describe("Search component", () => {
       // Press Enter
       // -> + trigger search param update
       //    + input value update & input lose focus
+      //    + activeSuggestionIndex is reset to -1
       await userEvent.keyboard(WrappedKeys.ENTER);
       expect(mockSetSearchParams).toHaveBeenCalledWith(
-        getURLSeachParams(mockSuggestions[0])
+        getURLSeachParams(mockSuggestions[1])
       );
-      expect(input).toHaveValue(mockSuggestions[0]);
+      expect(input).toHaveValue(mockSuggestions[1]);
       await waitFor(() => expect(input).not.toHaveFocus());
     });
   });
