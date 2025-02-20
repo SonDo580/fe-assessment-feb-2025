@@ -4,6 +4,10 @@
 
 A web application where user can `search for anything` and `get the same results` every time.
 
+## Live preview:
+
+https://fe-assessment-feb-2025.vercel.app/
+
 ## Features:
 
 - Search and display results.
