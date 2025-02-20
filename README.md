@@ -67,6 +67,24 @@ open coverage/index.html
 4. Test coverage evidence
    ![Test Coverage](assets/coverage.png)
 
+## Production build
+
+To test the production build locally, follow these steps:
+
+1. Build the project
+
+```bash
+npm run build
+```
+
+2. Serve the build with a local server
+
+```bash
+npm run preview
+```
+
+3. Open the browser and go to http://localhost:4173
+
 ## Note on implementation:
 
 1. In real application, the server returns the correct response. So I use the mock response as is to display results without filtering for items that really contains keyword.
