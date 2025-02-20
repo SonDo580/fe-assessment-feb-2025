@@ -64,6 +64,9 @@ npm run test:coverage
 open coverage/index.html
 ```
 
+4. Test coverage evidence
+   ![Test Coverage](assets/coverage.png)
+
 ## Note on implementation:
 
 1. In real application, the server returns the correct response. So I use the mock response as is to display results without filtering for items that really contains keyword.
