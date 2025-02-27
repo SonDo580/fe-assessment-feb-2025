@@ -130,6 +130,7 @@ function Search() {
           {/* Search input */}
           <input
             type="text"
+            placeholder="Enter something"
             ref={searchInputRef}
             value={keyword}
             onChange={onInputChange}
