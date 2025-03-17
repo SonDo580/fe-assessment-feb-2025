@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   KeyboardEvent,
   MouseEvent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -21,6 +22,7 @@ import { useQuery } from "@/hooks/useQuery";
 import { TSuggestionResults } from "@/types";
 import CloseIcon from "@/components/icons/CloseIcon";
 import SearchIcon from "@/components/icons/SearchIcon";
+import { transformSuggestionResults } from "@/utils/transform-response";
 
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,10 +38,16 @@ function Search() {
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
+  const transformResponseFn = useCallback(
+    (data: TSuggestionResults) => transformSuggestionResults(data, keyword),
+    [keyword]
+  );
+
   const suggestionsQueryResponse = useQuery<TSuggestionResults>({
     url: shouldShowDropdown
       ? `${suggestionEndpoint}?keyword=${debouncedKeyword}`
       : "",
+    transformResponseFn,
   });
 
   const displayedSuggestions =

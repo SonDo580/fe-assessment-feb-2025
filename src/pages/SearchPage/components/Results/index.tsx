@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 
@@ -5,13 +6,20 @@ import { useQuery } from "@/hooks/useQuery";
 import { searchEndpoint } from "@/services/api-endpoints";
 import { TSearchResults } from "@/types";
 import ResultItem from "./ResultItem";
+import { transformSearchResults } from "@/utils/transform-response";
 
 function Results() {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("q") || "";
 
+  const transformResponseFn = useCallback(
+    (data: TSearchResults) => transformSearchResults(data, keyword),
+    [keyword]
+  );
+
   const { loading, data, errorMsg } = useQuery<TSearchResults>({
     url: keyword && `${searchEndpoint}?keyword=${keyword}`,
+    transformResponseFn,
   });
 
   const wrapperClassNames = "px-8 md:px-40 pt-10";
