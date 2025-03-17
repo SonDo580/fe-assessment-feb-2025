@@ -89,11 +89,13 @@ npm run preview
 
 3. Open the browser and go to http://localhost:4173
 
+## Extra:
+
+The endpoints return fixed responses, so I use transform functions to mimic a `real search experience` for user.
+
 ## Note on implementation:
 
-1. In real application, the server returns the correct response. So I use the mock response as is to display results without filtering for items that really contains keyword.
-
-2. When handle clearing input by clicking clear button and select suggestion from the the suggestions dropdown, I use onMouseDown instead of onClick (because of the order in which events are fires).
+When handle clearing input by clicking clear button and select suggestion from the the suggestions dropdown, I use onMouseDown instead of onClick (because of the order in which events are fires).
 
 - When we click on ClearButton / SuggestionItem, the `blur` event on SearchInput is triggered, which set the `isInputFocused` state to `false`
 - The ClearButton / SuggestionsDropdown is unmounted. So the `click` event will not fired on those elements.
