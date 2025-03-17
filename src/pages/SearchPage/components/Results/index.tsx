@@ -3,14 +3,14 @@ import classNames from "classnames";
 
 import { useQuery } from "@/hooks/useQuery";
 import { searchEndpoint } from "@/services/api-endpoints";
-import { TSeachResults } from "@/types";
+import { TSearchResults } from "@/types";
 import ResultItem from "./ResultItem";
 
 function Results() {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("q") || "";
 
-  const { loading, data, errorMsg } = useQuery<TSeachResults>({
+  const { loading, data, errorMsg } = useQuery<TSearchResults>({
     url: keyword && `${searchEndpoint}?keyword=${keyword}`,
   });
 

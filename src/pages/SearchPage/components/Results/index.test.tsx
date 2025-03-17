@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 
 import { useQuery } from "@/hooks/useQuery";
 import Results from ".";
-import { TSeachResults } from "@/types";
+import { TSearchResults } from "@/types";
 
 vi.mock("react-router-dom", () => ({
   useSearchParams: vi.fn(),
@@ -70,7 +70,7 @@ describe("Results component", () => {
 
   it("render no-data", () => {
     const keyword = "test";
-    const mockData: TSeachResults = {
+    const mockData: TSearchResults = {
       TotalNumberOfResults: 0,
       Page: 1,
       PageSize: 10,
@@ -92,7 +92,7 @@ describe("Results component", () => {
 
   it("render results correctly", () => {
     const keyword = "test";
-    const mockData: TSeachResults = {
+    const mockData: TSearchResults = {
       TotalNumberOfResults: 2,
       Page: 1,
       PageSize: 10,

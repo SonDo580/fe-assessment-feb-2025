@@ -21,7 +21,7 @@ export type TResultItem = {
   DocumentURI: string;
 };
 
-export type TSeachResults = {
+export type TSearchResults = {
   TotalNumberOfResults: number;
   Page: number;
   PageSize: number;
