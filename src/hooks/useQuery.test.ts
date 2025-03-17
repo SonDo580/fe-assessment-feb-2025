@@ -36,6 +36,28 @@ describe("useQuery hook", () => {
     expect(result.current.errorMsg).toBe("");
   });
 
+  it("should apply transform function to the fetched data", async () => {
+    const url = searchEndpoint;
+
+    // example
+    const transformResponseFn = (data: typeof queryResults) => ({
+      ...data,
+      TotalNumberOfResults: data.TotalNumberOfResults * 2,
+    });
+
+    const { result } = renderHook(() => useQuery({ url, transformResponseFn }));
+
+    expect(global.fetch).toHaveBeenCalledWith(url);
+    expect(result.current.loading).toBe(true);
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.errorMsg).toBe("");
+    expect(result.current.data).toStrictEqual({
+      ...queryResults,
+      TotalNumberOfResults: queryResults.TotalNumberOfResults * 2,
+    });
+  });
+
   it("should not make request if url is empty", async () => {
     const { result } = renderHook(() => useQuery({ url: "" }));
 
