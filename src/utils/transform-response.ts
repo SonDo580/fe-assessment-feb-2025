@@ -1,10 +1,15 @@
-import { THighlightOffset, TResultItem, TSearchResults } from "@/types";
+import {
+  THighlightOffset,
+  TResultItem,
+  TSearchResults,
+  TSuggestionResults,
+} from "@/types";
 
 /**
  * OPTIONAL:
  * Functions to transform result on the FE side when using fixed data
  * - transformSearchResults
- * - transformSuggestions 
+ * - transformSuggestionResults
  */
 
 export function transformSearchResults(
@@ -21,7 +26,7 @@ export function transformSearchResults(
   // - Update TotalNumberOfResults
   //   + let n = number of filtered items
   //   + if n matches PageSize, we can keep TotalNumberOfResults
-  //   + if n < PageSize, we should use n for TotalNumberOfResults 
+  //   + if n < PageSize, we should use n for TotalNumberOfResults
 
   const generateHighlights = (text: string): THighlightOffset[] => {
     const highlights: THighlightOffset[] = [];
@@ -77,5 +82,20 @@ export function transformSearchResults(
     PageSize,
     ResultItems: filteredItems,
     TotalNumberOfResults: total,
+  };
+}
+
+export function transformSuggestionResults(
+  data: TSuggestionResults,
+  keyword: string
+): TSuggestionResults {
+  const lowerKeyword = keyword.toLowerCase();
+  const filteredSuggestions = data.suggestions.filter((suggestion) =>
+    suggestion.toLowerCase().includes(lowerKeyword)
+  );
+
+  return {
+    stemmedQueryTerm: keyword,
+    suggestions: filteredSuggestions,
   };
 }

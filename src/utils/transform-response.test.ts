@@ -1,5 +1,8 @@
-import { TSearchResults } from "@/types";
-import { transformSearchResults } from "./transform-response";
+import { TSearchResults, TSuggestionResults } from "@/types";
+import {
+  transformSearchResults,
+  transformSuggestionResults,
+} from "./transform-response";
 
 describe("Test transformSearchResults", () => {
   it("should return empty result if there are no matches", () => {
@@ -137,5 +140,50 @@ describe("Test transformSearchResults", () => {
     };
 
     expect(result).toStrictEqual(expectedResult);
+  });
+});
+
+describe("Test transformSuggestionResults", () => {
+  const fixedResult = {
+    stemmedQueryTerm: "child",
+    suggestions: [
+      "child care",
+      "child vaccination",
+      "child health",
+      "child education",
+      "child development account",
+      "register childcare",
+    ],
+  };
+
+  it("should return empty result if there are no matches", () => {
+    const keyword = "invisible";
+    const result = transformSuggestionResults(fixedResult, keyword);
+
+    const expectedResult: TSuggestionResults = {
+      stemmedQueryTerm: keyword,
+      suggestions: [],
+    };
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it("should filter result correctly", () => {
+    const keywordToExpectedSuggestions = {
+      EdU: ["child education"],
+      child: fixedResult.suggestions, // match all
+    };
+
+    for (const [keyword, suggestions] of Object.entries(
+      keywordToExpectedSuggestions
+    )) {
+      const result = transformSuggestionResults(fixedResult, keyword);
+      const expectedResult: TSuggestionResults = {
+        stemmedQueryTerm: keyword,
+        suggestions: suggestions,
+      };
+
+      expect(result).toStrictEqual(expectedResult);
+    }
   });
 });
